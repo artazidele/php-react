@@ -5,7 +5,7 @@ import ProductListItem from './ProductListItem';
 
 export function ProductList() {
     const [products, setProducts] = useState(null);
-    const [deleteProducts, setDeleteProducts] = useState([]);
+    const [checkedProducts, setCheckedProducts] = useState([]);
 
     useEffect(() => {
         getProducts();
@@ -14,16 +14,20 @@ export function ProductList() {
     const getProducts = () => {
         setProducts(null);
 
-        fetch('./get_products.php')
-            .then((res) => res.json())
-            .then((data) => {
-                setProducts(data);
-            })
+        axios.get("http://localhost/php-react/server/getproducts.php")
+        .then((res) => {
+            console.log(res.data);
+            setProducts(res.data);
+        });
+    }
+
+    const deleteCheckedProducts = (e) => {
+
     }
 
     return (
         <div>
-            <form>
+            <form onSubmit={deleteCheckedProducts}>
                 <div className=''>
                     <div className=''>Product List</div>
                     <div className=''>
@@ -32,13 +36,16 @@ export function ProductList() {
                     </div>
                 </div>
                 <div className=''>
-                    {/* <div className=''>
+                    {/* {products && <p>Products</p>} */}
+                    <div className=''>
                         {products && <div className="product-container">{products.map((product) => (
                             <div className="" key={ product.id }>
-                                <ProductListItem addDeleteId={addDeleteId} removeDeleteId={removeDeleteId} deleteId={deleteId} product={ product }/>
+                                <p>{product.name}</p>
+                                {/* <ProductListItem /> */}
+                                {/* <ProductListItem addDeleteId={addDeleteId} removeDeleteId={removeDeleteId} deleteId={deleteId} product={ product }/> */}
                             </div>
                         ))}</div>}
-                    </div> */}
+                    </div>
                 </div>
             </form>
         </div>

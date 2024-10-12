@@ -25,8 +25,6 @@ export function ProductAdd() {
         e.preventDefault();
         setDisabledBtn(true);
 
-        // window.location = "http://localhost:3000/";
-
         let data = new FormData();
         data.append('sku', sku)
         data.append('name', name)
@@ -37,18 +35,13 @@ export function ProductAdd() {
         data.append('length', length)
         data.append('width', width)
 
-        // axios.post("http://localhost:8000/addproduct.php", data)
         axios.post("http://localhost/php-react/server/addproduct.php", data)
         .then(response=>{
             if (response.data === "Success") {
-                window.location = "http://localhost:3000";
-                // console.log(response.data);
-                // setDisabledBtn(false);
+                window.location = "http://localhost:3000/";
             } else {
                 console.log(response.data);
                 // set errors
-                // setUniqueSkuError(response.data);
-                //
                 setDisabledBtn(false);
             }
         });
