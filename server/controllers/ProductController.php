@@ -14,6 +14,23 @@ class ProductController {
         $product->save();
     }
 
+    public function deleteProduct($data) {
+        $db = new Database();
+        $dbConnection = $db->getConnection();
+
+        if ($dbConnection->connect_error) {
+            die("Connection failed: " . $dbConnection->connect_error);
+        }
+
+        $query = "DELETE FROM products WHERE id=".$data['id'];
+
+        if (mysqli_query($dbConnection, $query)) {
+            echo "Success";
+        } else {
+            echo $dbConnection->error;
+        }
+    }
+
     public function getProducts() {
         $query = "SELECT * FROM products ORDER BY id ASC";
 

@@ -91,9 +91,8 @@ export function ProductAdd() {
                         <h3>Product Add</h3>
                         <div className="form-btns">
                             {!disabledBtn && <button className="btn" type='submit'>Save</button>}
-                            {disabledBtn && <button className="btn btn-disabled" disabled>Saving...</button>}
+                            {disabledBtn && <button className="btn btn-disabled" disabled>Save</button>}
                             {!disabledBtn && <Link to={'/'}><button className="btn">Cancel</button></Link>}
-                            {/* {!disabledBtn && <button className="btn">Cancel</button>} */}
                             {disabledBtn && <button className="btn btn-disabled" disabled>Cancel</button>}
                         </div>
                     </div>

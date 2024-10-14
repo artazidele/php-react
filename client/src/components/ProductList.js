@@ -7,6 +7,8 @@ export function ProductList() {
     const [products, setProducts] = useState(null);
     const [checkedProducts, setCheckedProducts] = useState([]);
 
+    const [disabledBtn, setDisabledBtn] = useState(false);
+
     useEffect(() => {
         getProducts();
     }, []);
@@ -16,36 +18,59 @@ export function ProductList() {
 
         axios.get("http://localhost/php-react/server/getproducts.php")
         .then((res) => {
-            console.log(res.data);
             setProducts(res.data);
         });
     }
 
-    const deleteCheckedProducts = (e) => {
+    const addCheckedProduct = (id) => {
+        const previousProducts = checkedProducts;
+        previousProducts.push(id);
+        setCheckedProducts(previousProducts);
+    }
 
+    const removeCheckedProduct = (id) => {
+        const previousProducts = checkedProducts.filter(it => it != id);
+        setCheckedProducts(previousProducts);
+    }
+
+    const deleteCheckedProducts = (e) => {
+        e.preventDefault();
+        setDisabledBtn(true);
+
+        checkedProducts.map(id => {
+            let data = new FormData();
+            data.append('id', id);
+            axios.post("http://localhost/php-react/server/deleteproduct.php", data)
+            .then(res => {
+                if(res.data === "Success") {
+                    removeCheckedProduct(id);
+                    getProducts();
+                }
+            });
+        });
+        setDisabledBtn(false);
     }
 
     return (
         <div>
             <form onSubmit={deleteCheckedProducts}>
-                <div className=''>
-                    <div className=''>Product List</div>
-                    <div className=''>
-                        <Link to={'/add-product'}><button>ADD</button></Link>
-                        <button type="submit">MASS DELETE</button>
+                <div className="header-div">
+                    <div className="header">
+                        <h3>Product List</h3>
+                        <div className="form-btns">
+                            {!disabledBtn && <Link to={'/add-product'}><button className="btn">ADD</button></Link>}
+                            {disabledBtn && <button className="btn btn-disabled" disabled>ADD</button>}
+                            {!disabledBtn && <button className="btn" type='submit'>MASS DELETE</button>}
+                            {disabledBtn && <button className="btn btn-disabled" disabled>MASS DELETE</button>}
+                        </div>
                     </div>
                 </div>
-                <div className=''>
-                    {/* {products && <p>Products</p>} */}
-                    <div className=''>
-                        {products && <div className="product-container">{products.map((product) => (
-                            <div className="" key={ product.id }>
-                                <p>{product.name}</p>
-                                {/* <ProductListItem /> */}
-                                {/* <ProductListItem addDeleteId={addDeleteId} removeDeleteId={removeDeleteId} deleteId={deleteId} product={ product }/> */}
-                            </div>
-                        ))}</div>}
-                    </div>
+                <div className="page-div">
+                    {products && <div className="products-grid">{products.map((product) => (
+                        <div className="product-item" key={ product.id }>
+                            <ProductListItem product={product} check={addCheckedProduct} uncheck={removeCheckedProduct} />
+                        </div>
+                    ))}</div>}
                 </div>
             </form>
         </div>
