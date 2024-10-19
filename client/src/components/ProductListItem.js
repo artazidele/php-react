@@ -18,7 +18,7 @@ const ProductListItem = (props) => {
                 <input className='' value={product.id} onChange={onCheck} type="checkbox"/>
                 <div className='product-info'>
                     <p>{ product.sku }</p>
-                    <p>{ product.product_name }</p>
+                    <p>{ product.name }</p>
                     <p>{ product.price } $</p>
                     { product.size && <p>Size: { product.size } MB</p> }
                     { product.weight && <p>Weight: { product.weight }KG</p> }

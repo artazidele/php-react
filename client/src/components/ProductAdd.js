@@ -20,20 +20,22 @@ export function ProductAdd() {
     const [width, setWidth] = useState("");
     const [length, setLength] = useState("");
     const [weight, setWeight] = useState("");
+    const [type, setType] = useState("Disk");
 
     const submitForm = (e) => {
         e.preventDefault();
         setDisabledBtn(true);
 
         let data = new FormData();
-        data.append('sku', sku)
-        data.append('name', name)
-        data.append('price', price)
-        data.append('size', size)
-        data.append('weight', weight)
-        data.append('height', height)
-        data.append('length', length)
-        data.append('width', width)
+        data.append('sku', sku);
+        data.append('name', name);
+        data.append('price', price);
+        data.append('size', size);
+        data.append('weight', weight);
+        data.append('height', height);
+        data.append('length', length);
+        data.append('width', width);
+        data.append('type', type);
 
         axios.post("http://localhost/php-react/server/addproduct.php", data)
         .then(response=>{
@@ -51,6 +53,7 @@ export function ProductAdd() {
         e.preventDefault();
         switch(e.target.value) {
             case 'disk':
+                setType("Disk");
                 setBookDiv(false);
                 setFurnitureDiv(false);
                 setDiskDiv(true);
@@ -60,6 +63,7 @@ export function ProductAdd() {
                 setWeight("");
                 return;
             case 'furniture':
+                setType("Furniture");
                 setDiskDiv(false);
                 setBookDiv(false);
                 setFurnitureDiv(true);
@@ -67,6 +71,7 @@ export function ProductAdd() {
                 setWeight("");
                 return;
             case 'book':
+                setType("Book");
                 setDiskDiv(false);
                 setFurnitureDiv(false);
                 setBookDiv(true);
@@ -76,6 +81,7 @@ export function ProductAdd() {
                 setWeight("");
                 return;
             default:
+                setType("Disk");
                 setFurnitureDiv(false);
                 setBookDiv(false);
                 setDiskDiv(true);
@@ -115,7 +121,7 @@ export function ProductAdd() {
                         </div>
                         <div className="div_input">
                             <label>Type Switcher</label>
-                            <select onChange={changeLayout} id='productType'>
+                            <select name="type" onChange={changeLayout} id='productType'>
                                 <option value="disk">DVD</option>
                                 <option value="book">Book</option>
                                 <option value="furniture">Furniture</option>

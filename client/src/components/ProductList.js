@@ -29,7 +29,7 @@ export function ProductList() {
     }
 
     const removeCheckedProduct = (id) => {
-        const previousProducts = checkedProducts.filter(it => it != id);
+        const previousProducts = checkedProducts.filter(it => it !== id);
         setCheckedProducts(previousProducts);
     }
 
