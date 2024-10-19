@@ -16,16 +16,47 @@ abstract class Product {
     protected $price;
     protected $type;
 
-    public function __construct($sku, $name, $price, $type, $id) {
-        $this->id = $id;
-        $this->sku = $sku;
-        $this->name = $name;
-        $this->price = $price;
-        $this->type = $type;
+    public function setId($value) {
+        $this->id = $value;
+    }
+
+    public function setSku($value) {
+        $this->sku = $value;
+    }
+
+    public function setName($value) {
+        $this->name = $value;
+    }
+
+    public function setPrice($value) {
+        $this->price = $value;
+    }
+
+    public function setType($value) {
+        $this->type = $value;
+    }
+
+    public function getId(): Int {
+        return $this->id;
+    }
+
+    public function getSku(): String {
+        return $this->sku;
+    }
+
+    public function getName(): String {
+        return $this->name;
+    }
+
+    public function getPrice(): Float {
+        return $this->price;
+    }
+
+    public function getType(): String {
+        return $this->type;
     }
 
     public function save($query) {
-
         $db = new Database();
         $dbConnection = $db->getConnection();
 
@@ -39,20 +70,48 @@ abstract class Product {
             echo $dbConnection->error;
         }
     }   
+
+    abstract public function create();
+
+    abstract public function getJsonData(): String;
 }
 
 class Disk extends Product {
     private $size;
 
     public function __construct($data, $id){
-        parent::__construct($data['sku'], $data['name'], $data['price'], 'Disk', $id);
-        $this->size = $data['size'];
+        $this->setId($id);
+        $this->setSku($data['sku']);
+        $this->setName($data['name']);
+        $this->setPrice($data['price']);
+        $this->setType($data['type']);
+        $this->setSize($data['size']);
+    }
 
-        if ($id === NULL) {
-            $query = "INSERT INTO products(sku, name, price, size, type) 
-            VALUES ('$this->sku', '$this->name', '$this->price', '$this->size', '$this->type')";
-            $this->save($query);
-        }
+    public function setSize($value) {
+        $this->size = $value;
+    }
+
+    public function getSize(): Int {
+        return $this->size;
+    }
+
+    public function create() {
+        $query = "INSERT INTO products(sku, name, price, size, type) 
+        VALUES ('$this->sku', '$this->name', '$this->price', '$this->size', '$this->type')";
+        $this->save($query);
+    }
+
+    public function getJsonData(): String {
+        $disk = array(
+            "id" => $this->getId(),
+            "sku" => $this->getSku(),
+            "name" => $this->getName(),
+            "price" => $this->getPrice(),
+            "size" => $this->getSize(),
+        );
+
+        return serialize($disk);
     }
 }
 
@@ -60,14 +119,38 @@ class Book extends Product {
     private $weight;
 
     public function __construct($data, $id){
-        parent::__construct($data['sku'], $data['name'], $data['price'], $data['type'], $id);
-        $this->weight = $data['weight'];
+        $this->setId($id);
+        $this->setSku($data['sku']);
+        $this->setName($data['name']);
+        $this->setPrice($data['price']);
+        $this->setType($data['type']);
+        $this->setWeight($data['weight']);
+    }
 
-        if ($id === NULL) {
-            $query = "INSERT INTO products(sku, name, price, weight, type) 
-            VALUES ('$this->sku', '$this->name', '$this->price', '$this->weight', '$this->type')";
-            $this->save($query);
-        }
+    public function setWeight($value) {
+        $this->weight = $value;
+    }
+
+    public function getWeight(): Int {
+        return $this->weight;
+    }
+
+    public function create() {
+        $query = "INSERT INTO products(sku, name, price, weight, type) 
+        VALUES ('$this->sku', '$this->name', '$this->price', '$this->weight', '$this->type')";
+        $this->save($query);
+    }
+
+    public function getJsonData(): String {
+        $book = array(
+            "id" => $this->getId(),
+            "sku" => $this->getSku(),
+            "name" => $this->getName(),
+            "price" => $this->getPrice(),
+            "weight" => $this->getWeight(),
+        );
+
+        return serialize($book);
     }
 }
 
@@ -77,24 +160,65 @@ class Furniture extends Product {
     private $height;
 
     public function __construct($data, $id){
-        parent::__construct($data['sku'], $data['name'], $data['price'], $data['type'], $id);
-        $this->length = $data['length'];
-        $this->width = $data['width'];
-        $this->height = $data['height'];
-
-        if ($id === NULL) {
-            $query = "INSERT INTO products(sku, name, price, length, width, height, type) 
-            VALUES ('$this->sku', '$this->name', '$this->price', '$this->length', '$this->width', '$this->height', '$this->type')";
-            $this->save($query);
-        }
+        $this->setId($id);
+        $this->setSku($data['sku']);
+        $this->setName($data['name']);
+        $this->setPrice($data['price']);
+        $this->setType($data['type']);
+        $this->setLength($data['length']);
+        $this->setWidth($data['width']);
+        $this->setHeight($data['height']);
     }
 
+    public function setLength($value) {
+        $this->length = $value;
+    }
+
+    public function setWidth($value) {
+        $this->width = $value;
+    }
+
+    public function setHeight($value) {
+        $this->height = $value;
+    }
+
+    public function getLength(): Int {
+        return $this->length;
+    }
+
+    public function getHeight(): Int {
+        return $this->height;
+    }
+
+    public function getWidth(): Int {
+        return $this->width;
+    }
+
+    public function create() {
+        $query = "INSERT INTO products(sku, name, price, length, width, height, type) 
+        VALUES ('$this->sku', '$this->name', '$this->price', '$this->length', '$this->width', '$this->height', '$this->type')";
+        $this->save($query);
+    }
+
+    public function getJsonData(): String {
+        $furniture = array(
+            "id" => $this->getId(),
+            "sku" => $this->getSku(),
+            "name" => $this->getName(),
+            "price" => $this->getPrice(),
+            "length" => $this->getLength(),
+            "width" => $this->getWidth(),
+            "height" => $this->getHeight(),
+        );
+        return serialize($furniture);
+    }
 }
 
 class ProductController {
 
     public function addProduct($data) {
         $product = new $data['type']($data, NULL);
+        $product->create();
     }
 
     public function deleteProduct($data) {
@@ -131,22 +255,9 @@ class ProductController {
                 $products = array();
                 while ($row = $result->fetch_assoc()){
                     extract($row);
-                    // $product = new $row['type']($row, $row["id"]);
-                    $product = array(
-                        "id" => $row["id"],
-                        "sku" => $row["sku"],
-                        "name" => $row["name"],
-                        "price" => $row["price"],
-                        "size" => $row["size"],
-                        "weight" => $row["weight"],
-                        "height" => $row["height"],
-                        "length" => $row["length"],
-                        "width" => $row["width"],
-                    );
-                    // echo $product;
-                    array_push($products, $product);
+                    $product = new $row['type']($row, $row["id"]);
+                    array_push($products, unserialize($product->getJsonData()));
                 }
-
                 echo json_encode($products);
             } else {
                 echo json_encode();
