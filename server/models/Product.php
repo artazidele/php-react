@@ -1,16 +1,26 @@
 <?php
 
-include_once './database/Database.php';
-class Product {
-    public $id;
-    public $sku;
-    public $name;
-    public $price;
-    public $size;
+include_once '../database/Database.php';
 
-    public function save() {
-        $query = "INSERT INTO products(sku, name, price, size) 
-        VALUES ('$this->sku', '$this->name', '$this->price', '$this->size')";
+abstract class Product {
+    private $id;
+    private $sku;
+    private $name;
+    private $price;
+    private $type;
+
+    public function __construct($sku, $name, $price, $type) {
+        // $this->id = $id;
+        $this->sku = $sku;
+        $this->name = $name;
+        $this->price = $price;
+        $this->type = $type;
+    }
+
+
+    public function save($query) {
+        // $query = "INSERT INTO products(sku, name, price, size) 
+        // VALUES ('$this->sku', '$this->name', '$this->price', '$this->size')";
 
         $db = new Database();
         $dbConnection = $db->getConnection();
@@ -25,5 +35,7 @@ class Product {
             echo $dbConnection->error;
         }
     }
+
+    
 }
 ?>
