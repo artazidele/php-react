@@ -16,7 +16,8 @@ export function ProductList() {
     const getProducts = () => {
         setProducts(null);
 
-        axios.get("http://localhost/php-react/server/getproducts.php")
+        // axios.get("http://localhost/php-react/server/getproducts.php")
+        axios.get("./server/getproducts.php")
         .then((res) => {
             setProducts(res.data);
         });
@@ -40,7 +41,8 @@ export function ProductList() {
         checkedProducts.map(id => {
             let data = new FormData();
             data.append('id', id);
-            axios.post("http://localhost/php-react/server/deleteproduct.php", data)
+            // axios.post("http://localhost/php-react/server/deleteproduct.php", data)
+            axios.post("./server/deleteproduct.php", data)
             .then(res => {
                 if(res.data === "Success") {
                     removeCheckedProduct(id);

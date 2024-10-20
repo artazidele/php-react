@@ -59,16 +59,20 @@ class Furniture extends Product {
             $valid = "emptyWidth";
         } elseif (!is_numeric($this->price)) {
             $valid = "priceTypeError";
-        } elseif (!is_numeric($this->width)) {
+        } elseif (!ctype_digit($this->width)) {
             $valid = "widthTypeError";
-        }  elseif (!is_numeric($this->length)) {
+        }  elseif (!ctype_digit($this->length)) {
             $valid = "lengthTypeError";
-        }  elseif (!is_numeric($this->height)) {
+        }  elseif (!ctype_digit($this->height)) {
             $valid = "heightTypeError";
         } elseif (strlen($this->sku) > 12) {
             $valid = "skuSizeError";
         } elseif ($uniqueSku === false) {
             $valid = "uniqueSkuError";
+        } elseif (str_contains($this->price, '.')) {
+            if (strlen(substr(strrchr($this->price, "."), 1)) > 2) {
+                $valid = "priceDecimal";
+            }
         }
         return $valid;
     }

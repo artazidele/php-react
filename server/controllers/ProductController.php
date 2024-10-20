@@ -79,8 +79,6 @@ class ProductController {
                     extract($row);
                     if ($row['sku'] === $newSku) {
                         $unique = false;
-                        // echo $row['sku'];
-                        // echo $newSku;
                         break;
                     }
                 }

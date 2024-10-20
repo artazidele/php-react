@@ -16,7 +16,7 @@ const ProductListItem = (props) => {
     return (
         <div>
             {product && <div>
-                <input className='' value={product.id} onChange={onCheck} type="checkbox"/>
+                <input className='.delete-checkbox' value={product.id} onChange={onCheck} type="checkbox"/>
                 <div className='product-info'>
                     <p>{ product.sku }</p>
                     <p>{ product.name }</p>

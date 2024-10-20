@@ -18,7 +18,7 @@ class Book extends Product {
         $this->weight = $value;
     }
 
-    public function getWeight(): Int {
+    public function getWeight(): Float {
         return $this->weight;
     }
 
@@ -42,7 +42,15 @@ class Book extends Product {
             $valid = "skuSizeError";
         } elseif ($uniqueSku === false) {
             $valid = "uniqueSkuError";
-        }
+        } elseif (str_contains($this->price, '.')) {
+            if (strlen(substr(strrchr($this->price, "."), 1)) > 2) {
+                $valid = "priceDecimal";
+            }
+        } elseif (str_contains($this->weight, '.')) {
+            if (strlen(substr(strrchr($this->weight, "."), 1)) > 3) {
+                $valid = "weightDecimal";
+            }
+        } 
         return $valid;
     }
 

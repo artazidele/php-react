@@ -36,12 +36,16 @@ class Disk extends Product {
             $valid = "emptySize";
         } elseif (!is_numeric($this->price)) {
             $valid = "priceTypeError";
-        } elseif (!is_numeric($this->size)) {
+        } elseif (!ctype_digit($this->size)) {
             $valid = "sizeTypeError";
         } elseif (strlen($this->sku) > 12) {
             $valid = "skuSizeError";
         } elseif ($uniqueSku === false) {
             $valid = "uniqueSkuError";
+        } elseif (str_contains($this->price, '.')) {
+            if (strlen(substr(strrchr($this->price, "."), 1)) > 2) {
+                $valid = "priceDecimal";
+            }
         }
         return $valid;
     }
