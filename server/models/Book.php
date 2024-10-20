@@ -1,18 +1,73 @@
 <?php
 
-include_once './Product.php';
+include_once 'Product.php';
+
 class Book extends Product {
     private $weight;
 
-    public function __construct($data){
-        parent::__construct($data['sku'], $data['name'], $data['price'], $data['type']);
-        $this->weight = $data['weight'];
-
-        $query = "INSERT INTO products(sku, name, price, weight, type) 
-        VALUES ('$this->sku', '$this->name', '$this->price', '$this->weight', '$this->type')";
-
-        $this->save($query);
+    public function __construct($data, $id){
+        $this->setId($id);
+        $this->setSku($data['sku']);
+        $this->setName($data['name']);
+        $this->setPrice($data['price']);
+        $this->setType($data['type']);
+        $this->setWeight($data['weight']);
     }
 
+    public function setWeight($value) {
+        $this->weight = $value;
+    }
+
+    public function getWeight(): Int {
+        return $this->weight;
+    }
+
+    public function validate(): String {
+        $valid = "true";
+        $controller = new ProductController;
+        $uniqueSku = $controller->checkUniqueSku($this->sku);
+        if ($this->sku === "") {
+            $valid = "emptySku";
+        } elseif ($this->name === "") {
+            $valid = "emptyName";
+        } elseif ($this->price === "") {
+            $valid = "emptyPrice";
+        } elseif ($this->weight === "") {
+            $valid = "emptyWeight";
+        } elseif (!is_numeric($this->price)) {
+            $valid = "priceTypeError";
+        } elseif (!is_numeric($this->weight)) {
+            $valid = "weightTypeError";
+        } elseif (strlen($this->sku) > 12) {
+            $valid = "skuSizeError";
+        } elseif ($uniqueSku === false) {
+            $valid = "uniqueSkuError";
+        }
+        return $valid;
+    }
+
+    public function create() {
+        $valid = $this->validate();
+        if ($valid === "true") {
+            $query = "INSERT INTO products(sku, name, price, weight, type) 
+            VALUES ('$this->sku', '$this->name', '$this->price', '$this->weight', '$this->type')";
+            $this->save($query);
+        } else {
+            echo $valid;
+        }
+    }
+
+    public function getJsonData(): String {
+        $book = array(
+            "id" => $this->getId(),
+            "sku" => $this->getSku(),
+            "name" => $this->getName(),
+            "price" => $this->getPrice(),
+            "weight" => $this->getWeight(),
+        );
+
+        return serialize($book);
+    }
 }
+
 ?>

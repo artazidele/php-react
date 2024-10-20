@@ -1,22 +1,101 @@
 <?php
 
-include_once './Product.php';
+include_once 'Product.php';
 class Furniture extends Product {
     private $length;
     private $width;
     private $height;
 
-    public function __construct($data){
-        parent::__construct($data['sku'], $data['name'], $data['price'], $data['type']);
-        $this->length = $data['length'];
-        $this->width = $data['width'];
-        $this->height = $data['height'];
-
-        $query = "INSERT INTO products(sku, name, price, length, width, height, type) 
-        VALUES ('$this->sku', '$this->name', '$this->price', '$this->length', '$this->width', '$this->height', '$this->type')";
-
-        $this->save($query);
+    public function __construct($data, $id){
+        $this->setId($id);
+        $this->setSku($data['sku']);
+        $this->setName($data['name']);
+        $this->setPrice($data['price']);
+        $this->setType($data['type']);
+        $this->setLength($data['length']);
+        $this->setWidth($data['width']);
+        $this->setHeight($data['height']);
     }
 
+    public function setLength($value) {
+        $this->length = $value;
+    }
+
+    public function setWidth($value) {
+        $this->width = $value;
+    }
+
+    public function setHeight($value) {
+        $this->height = $value;
+    }
+
+    public function getLength(): Int {
+        return $this->length;
+    }
+
+    public function getHeight(): Int {
+        return $this->height;
+    }
+
+    public function getWidth(): Int {
+        return $this->width;
+    }
+
+    public function validate(): String {
+        $valid = "true";
+        $controller = new ProductController;
+        $uniqueSku = $controller->checkUniqueSku($this->sku);
+        if ($this->sku === "") {
+            $valid = "emptySku";
+        } elseif ($this->name === "") {
+            $valid = "emptyName";
+        } elseif ($this->price === "") {
+            $valid = "emptyPrice";
+        } elseif ($this->length === "") {
+            $valid = "emptyLength";
+        } elseif ($this->height === "") {
+            $valid = "emptyHeight";
+        } elseif ($this->width === "") {
+            $valid = "emptyWidth";
+        } elseif (!is_numeric($this->price)) {
+            $valid = "priceTypeError";
+        } elseif (!is_numeric($this->width)) {
+            $valid = "widthTypeError";
+        }  elseif (!is_numeric($this->length)) {
+            $valid = "lengthTypeError";
+        }  elseif (!is_numeric($this->height)) {
+            $valid = "heightTypeError";
+        } elseif (strlen($this->sku) > 12) {
+            $valid = "skuSizeError";
+        } elseif ($uniqueSku === false) {
+            $valid = "uniqueSkuError";
+        }
+        return $valid;
+    }
+
+    public function create() {
+        $valid = $this->validate();
+        if ($valid === "true") {
+            $query = "INSERT INTO products(sku, name, price, length, width, height, type) 
+            VALUES ('$this->sku', '$this->name', '$this->price', '$this->length', '$this->width', '$this->height', '$this->type')";
+            $this->save($query);
+        } else {
+            echo $valid;
+        }
+    }
+
+    public function getJsonData(): String {
+        $furniture = array(
+            "id" => $this->getId(),
+            "sku" => $this->getSku(),
+            "name" => $this->getName(),
+            "price" => $this->getPrice(),
+            "length" => $this->getLength(),
+            "width" => $this->getWidth(),
+            "height" => $this->getHeight(),
+        );
+        return serialize($furniture);
+    }
 }
+
 ?>
