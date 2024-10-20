@@ -1,27 +1,55 @@
 <?php
 
-include_once '../database/Database.php';
+include_once './database/Database.php';
 
 abstract class Product {
-    private $id;
-    private $sku;
-    private $name;
-    private $price;
-    private $type;
+    protected $id;
+    protected $sku;
+    protected $name;
+    protected $price;
+    protected $type;
 
-    public function __construct($sku, $name, $price, $type) {
-        // $this->id = $id;
-        $this->sku = $sku;
-        $this->name = $name;
-        $this->price = $price;
-        $this->type = $type;
+    public function setId($value) {
+        $this->id = $value;
     }
 
+    public function setSku($value) {
+        $this->sku = $value;
+    }
+
+    public function setName($value) {
+        $this->name = $value;
+    }
+
+    public function setPrice($value) {
+        $this->price = $value;
+    }
+
+    public function setType($value) {
+        $this->type = $value;
+    }
+
+    public function getId(): Int {
+        return $this->id;
+    }
+
+    public function getSku(): String {
+        return $this->sku;
+    }
+
+    public function getName(): String {
+        return $this->name;
+    }
+
+    public function getPrice(): Float {
+        return $this->price;
+    }
+
+    public function getType(): String {
+        return $this->type;
+    }
 
     public function save($query) {
-        // $query = "INSERT INTO products(sku, name, price, size) 
-        // VALUES ('$this->sku', '$this->name', '$this->price', '$this->size')";
-
         $db = new Database();
         $dbConnection = $db->getConnection();
 
@@ -36,6 +64,11 @@ abstract class Product {
         }
     }
 
-    
+    abstract public function create();
+
+    abstract public function validate(): String;
+
+    abstract public function getJsonData(): String;
 }
+
 ?>

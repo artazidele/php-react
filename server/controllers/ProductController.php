@@ -1,7 +1,7 @@
 <?php
 
 include_once './database/Database.php';
-// include_once '../models/Product.php';
+include_once './models/Product.php';
 
 // //
 // include '../models/Book.php';
@@ -9,7 +9,7 @@ include_once './database/Database.php';
 // include '../models/Furniture.php';
 //
 
-abstract class Product {
+abstract class Product2 {
     protected $id;
     protected $sku;
     protected $name;
@@ -73,6 +73,8 @@ abstract class Product {
 
     abstract public function create();
 
+    abstract public function validate(): String;
+
     abstract public function getJsonData(): String;
 }
 
@@ -81,11 +83,11 @@ class Disk extends Product {
 
     public function __construct($data, $id){
         $this->setId($id);
-        $this->setSku($data['sku']);
-        $this->setName($data['name']);
-        $this->setPrice($data['price']);
-        $this->setType($data['type']);
-        $this->setSize($data['size']);
+        $this->setSku(trim($data['sku']));
+        $this->setName(trim($data['name']));
+        $this->setPrice(trim($data['price']));
+        $this->setType(trim($data['type']));
+        $this->setSize(trim($data['size']));
     }
 
     public function setSize($value) {
@@ -96,10 +98,39 @@ class Disk extends Product {
         return $this->size;
     }
 
+    public function validate(): String {
+        $valid = "true";
+        $controller = new ProductController;
+        $uniqueSku = $controller->checkUniqueSku($this->sku);
+        if ($this->sku === "") {
+            $valid = "emptySku";
+        } elseif ($this->name === "") {
+            $valid = "emptyName";
+        } elseif ($this->price === "") {
+            $valid = "emptyPrice";
+        } elseif ($this->size === "") {
+            $valid = "emptySize";
+        } elseif (!is_numeric($this->price)) {
+            $valid = "priceTypeError";
+        } elseif (!is_numeric($this->size)) {
+            $valid = "sizeTypeError";
+        } elseif (strlen($this->sku) > 12) {
+            $valid = "skuSizeError";
+        } elseif ($uniqueSku === false) {
+            $valid = "uniqueSkuError";
+        }
+        return $valid;
+    }
+
     public function create() {
-        $query = "INSERT INTO products(sku, name, price, size, type) 
-        VALUES ('$this->sku', '$this->name', '$this->price', '$this->size', '$this->type')";
-        $this->save($query);
+        $valid = $this->validate();
+        if ($valid === "true") {
+            $query = "INSERT INTO products(sku, name, price, size, type) 
+            VALUES ('$this->sku', '$this->name', '$this->price', '$this->size', '$this->type')";
+            $this->save($query);
+        } else {
+            echo $valid;
+        }
     }
 
     public function getJsonData(): String {
@@ -135,10 +166,39 @@ class Book extends Product {
         return $this->weight;
     }
 
+    public function validate(): String {
+        $valid = "true";
+        $controller = new ProductController;
+        $uniqueSku = $controller->checkUniqueSku($this->sku);
+        if ($this->sku === "") {
+            $valid = "emptySku";
+        } elseif ($this->name === "") {
+            $valid = "emptyName";
+        } elseif ($this->price === "") {
+            $valid = "emptyPrice";
+        } elseif ($this->weight === "") {
+            $valid = "emptyWeight";
+        } elseif (!is_numeric($this->price)) {
+            $valid = "priceTypeError";
+        } elseif (!is_numeric($this->weight)) {
+            $valid = "weightTypeError";
+        } elseif (strlen($this->sku) > 12) {
+            $valid = "skuSizeError";
+        } elseif ($uniqueSku === false) {
+            $valid = "uniqueSkuError";
+        }
+        return $valid;
+    }
+
     public function create() {
-        $query = "INSERT INTO products(sku, name, price, weight, type) 
-        VALUES ('$this->sku', '$this->name', '$this->price', '$this->weight', '$this->type')";
-        $this->save($query);
+        $valid = $this->validate();
+        if ($valid === "true") {
+            $query = "INSERT INTO products(sku, name, price, weight, type) 
+            VALUES ('$this->sku', '$this->name', '$this->price', '$this->weight', '$this->type')";
+            $this->save($query);
+        } else {
+            echo $valid;
+        }
     }
 
     public function getJsonData(): String {
@@ -194,10 +254,47 @@ class Furniture extends Product {
         return $this->width;
     }
 
+    public function validate(): String {
+        $valid = "true";
+        $controller = new ProductController;
+        $uniqueSku = $controller->checkUniqueSku($this->sku);
+        if ($this->sku === "") {
+            $valid = "emptySku";
+        } elseif ($this->name === "") {
+            $valid = "emptyName";
+        } elseif ($this->price === "") {
+            $valid = "emptyPrice";
+        } elseif ($this->length === "") {
+            $valid = "emptyLength";
+        } elseif ($this->height === "") {
+            $valid = "emptyHeight";
+        } elseif ($this->width === "") {
+            $valid = "emptyWidth";
+        } elseif (!is_numeric($this->price)) {
+            $valid = "priceTypeError";
+        } elseif (!is_numeric($this->width)) {
+            $valid = "widthTypeError";
+        }  elseif (!is_numeric($this->length)) {
+            $valid = "lengthTypeError";
+        }  elseif (!is_numeric($this->height)) {
+            $valid = "heightTypeError";
+        } elseif (strlen($this->sku) > 12) {
+            $valid = "skuSizeError";
+        } elseif ($uniqueSku === false) {
+            $valid = "uniqueSkuError";
+        }
+        return $valid;
+    }
+
     public function create() {
-        $query = "INSERT INTO products(sku, name, price, length, width, height, type) 
-        VALUES ('$this->sku', '$this->name', '$this->price', '$this->length', '$this->width', '$this->height', '$this->type')";
-        $this->save($query);
+        $valid = $this->validate();
+        if ($valid === "true") {
+            $query = "INSERT INTO products(sku, name, price, length, width, height, type) 
+            VALUES ('$this->sku', '$this->name', '$this->price', '$this->length', '$this->width', '$this->height', '$this->type')";
+            $this->save($query);
+        } else {
+            echo $valid;
+        }
     }
 
     public function getJsonData(): String {
@@ -265,7 +362,37 @@ class ProductController {
         }
     }
 
-    
+    public function checkUniqueSku($newSku): Bool {
+        $query = "SELECT * FROM products ORDER BY id ASC";
+
+        $db = new Database();
+        $dbConnection = $db->getConnection();
+
+        if ($dbConnection->connect_error) {
+            die("Connection failed: " . $dbConnection->connect_error);
+        }
+
+        $result = mysqli_query($dbConnection, $query);
+
+        $unique = true;
+
+        if($result) {
+            if($result->num_rows > 0) {
+                $products = array();
+                while ($row = $result->fetch_assoc()){
+                    extract($row);
+                    if ($row['sku'] === $newSku) {
+                        $unique = false;
+                        // echo $row['sku'];
+                        // echo $newSku;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $unique;
+    }
 }
 
 ?>

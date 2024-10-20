@@ -5,8 +5,26 @@ import { Link } from "react-router-dom";
 export function ProductAdd() {
 
     const [disabledBtn, setDisabledBtn] = useState(false);
-    // const [requiredDataError, setRequiredDataError] = useState(true);
+
     const [uniqueSkuError, setUniqueSkuError] = useState(false);
+    const [skuSizeError, setSkuSizeError] = useState(false);
+
+    const [priceTypeError, setPriceTypeError] = useState(false);
+    const [weightTypeError, setWeightTypeError] = useState(false);
+    const [sizeTypeError, setSizeTypeError] = useState(false);
+    const [heightTypeError, setHeightTypeError] = useState(false);
+    const [widthTypeError, setWidthTypeError] = useState(false);
+    const [lengthTypeError, setLengthTypeError] = useState(false);
+
+    const [emptySku, setEmptySku] = useState(false);
+    const [emptyName, setEmptyName] = useState(false);
+    const [emptyPrice, setEmptyPrice] = useState(false);
+    const [emptySize, setEmptySize] = useState(false);
+    const [emptyHeight, setEmptyHeight] = useState(false);
+    const [emptyWidth, setEmptyWidth] = useState(false);
+    const [emptyLength, setEmptyLength] = useState(false);
+    const [emptyWeight, setEmptyWeight] = useState(false);
+
     
     const [diskDiv, setDiskDiv] = useState(true);
     const [furnitureDiv, setFurnitureDiv] = useState(false);
@@ -25,6 +43,26 @@ export function ProductAdd() {
     const submitForm = (e) => {
         e.preventDefault();
         setDisabledBtn(true);
+        // clear errors
+        // sku errors
+        setUniqueSkuError(false);
+        setSkuSizeError(false);
+        // type errors
+        setPriceTypeError(false);
+        setWeightTypeError(false);
+        setSizeTypeError(false);
+        setHeightTypeError(false);
+        setWidthTypeError(false);
+        setLengthTypeError(false);
+        // empty field errors
+        setEmptySku(false);
+        setEmptyName(false);
+        setEmptyHeight(false);
+        setEmptyLength(false);
+        setEmptyPrice(false);
+        setEmptySize(false);
+        setEmptyWeight(false);
+        setEmptyWidth(false);
 
         let data = new FormData();
         data.append('sku', sku);
@@ -42,8 +80,56 @@ export function ProductAdd() {
             if (response.data === "Success") {
                 window.location = "http://localhost:3000/";
             } else {
-                console.log(response.data);
+                console.log(response);
                 // set errors
+                if (response.data === "priceTypeError") {
+                    setPriceTypeError(true);
+                }
+                if (response.data === "weightTypeError") {
+                    setWeightTypeError(true);
+                }
+                if (response.data === "sizeTypeError") {
+                    setSizeTypeError(true);
+                }
+                if (response.data === "heightTypeError") {
+                    setHeightTypeError(true);
+                }
+                if (response.data === "lengthTypeError") {
+                    setLengthTypeError(true);
+                }
+                if (response.data === "widthTypeError") {
+                    setWidthTypeError(true);
+                }
+                if (response.data === "emptySku") {
+                    setEmptySku(true);
+                }
+                if (response.data === "emptyName") {
+                    setEmptyName(true);
+                }
+                if (response.data === "emptyPrice") {
+                    setEmptyPrice(true);
+                }
+                if (response.data === "emptySize") {
+                    setEmptySize(true);
+                }
+                if (response.data == "emptyHeight") {
+                    setEmptyHeight(true);
+                }
+                if (response.data === "emptyWidth") {
+                    setEmptyWidth(true);
+                }
+                if (response.data === "emptyLength") {
+                    setEmptyLength(true);
+                }
+                if (response.data === "emptyWeight") {
+                    setEmptyWeight(true);
+                }
+                if (response.data === "uniqueSkuError") {
+                    setUniqueSkuError(true);
+                }
+                if (response.data === "skuSizeError") {
+                    setSkuSizeError(true);
+                }
                 setDisabledBtn(false);
             }
         });
@@ -61,6 +147,10 @@ export function ProductAdd() {
                 setWidth("");
                 setLength("");
                 setWeight("");
+                setEmptyHeight(false);
+                setEmptyLength(false);
+                setEmptyWeight(false);
+                setEmptyWidth(false);
                 return;
             case 'furniture':
                 setType("Furniture");
@@ -69,6 +159,8 @@ export function ProductAdd() {
                 setFurnitureDiv(true);
                 setSize("");
                 setWeight("");
+                setEmptySize(false);
+                setEmptyWeight(false);
                 return;
             case 'book':
                 setType("Book");
@@ -79,6 +171,10 @@ export function ProductAdd() {
                 setWidth("");
                 setLength("");
                 setWeight("");
+                setEmptyHeight(false);
+                setEmptyLength(false);
+                setEmptySize(false);
+                setEmptyWidth(false);
                 return;
             default:
                 setType("Disk");
@@ -104,21 +200,25 @@ export function ProductAdd() {
                     </div>
                 </div>
                 <div className="page-div">
-                    {/* {requiredDataError && <p className="error-p">Please, submit required data</p>} */}
                     <div className="all_type_inputs">
                         <div className="div_input">
                             <label>SKU</label>
                             <input type="text" value={sku} onChange={(e) => setSku(e.target.value)}/>
                         </div>
                         {uniqueSkuError && <p className="error-p">This SKU already exists</p>}
+                        {emptySku && <p className="error-p">SKU is required</p>}
+                        {skuSizeError && <p className="error-p">Max SKU size is 12 characters</p>}
                         <div className="div_input">
                             <label>Name</label>
                             <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
                         </div>
+                        {emptyName && <p className="error-p">Name is required</p>}
                         <div className="div_input">
                             <label>Price ($)</label>
                             <input type="text" value={price} onChange={(e) => setPrice(e.target.value)}/>
                         </div>
+                        {emptyPrice && <p className="error-p">Price is required</p>}
+                        {priceTypeError && <p className="error-p">Price should be a number</p>}
                         <div className="div_input">
                             <label>Type Switcher</label>
                             <select name="type" onChange={changeLayout} id='productType'>
@@ -135,6 +235,8 @@ export function ProductAdd() {
                                 <label>Size (MB)</label>
                                 <input type="text" value={size} onChange={(e) => setSize(e.target.value)}/>
                             </div>
+                            {sizeTypeError && <p className="error-p">Size should be a number</p>}
+                            {emptySize && <p className="error-p">Size is required</p>}
                         </div> }
                         { furnitureDiv && <div>
                             <p>Please, provide dimentions</p>
@@ -142,14 +244,20 @@ export function ProductAdd() {
                                 <label>Height (CM)</label>
                                 <input type="text" value={height} onChange={(e) => setHeight(e.target.value)}/>
                             </div>
+                            {heightTypeError && <p className="error-p">Height should be a number</p>}
+                            {emptyHeight && <p className="error-p">Height is required</p>}
                             <div className="div_input">
                                 <label>Width (CM)</label>
                                 <input type="text" value={width} onChange={(e) => setWidth(e.target.value)}/>
                             </div>
+                            {widthTypeError && <p className="error-p">Width should be a number</p>}
+                            {emptyWidth && <p className="error-p">Width is required</p>}
                             <div className="div_input">
                                 <label>Length (CM)</label>
                                 <input type="text" value={length} onChange={(e) => setLength(e.target.value)}/>
                             </div>
+                            {lengthTypeError && <p className="error-p">Length should be a number</p>}
+                            {emptyLength && <p className="error-p">Length is required</p>}
                         </div> }
                         { bookDiv && <div>
                             <p>Please, provide weight</p>
@@ -157,6 +265,8 @@ export function ProductAdd() {
                                 <label>Weight (KG)</label>
                                 <input type="text" value={weight} onChange={(e) => setWeight(e.target.value)}/>
                             </div>
+                            {weightTypeError && <p className="error-p">Weight should be a number</p>}
+                            {emptyWeight && <p className="error-p">Weight is required</p>}
                         </div> }
                     </div>
                 </div>
