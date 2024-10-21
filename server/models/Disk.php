@@ -1,6 +1,7 @@
 <?php
 
 include_once 'Product.php';
+include_once './controllers/ProductController.php';
 
 class Disk extends Product {
     private $size;
@@ -9,7 +10,7 @@ class Disk extends Product {
         $this->setId($id);
         $this->setSku(trim($data['sku']));
         $this->setName(trim($data['name']));
-        $this->setPrice(trim($data['price']));
+        $this->setPrice(str_replace(",", ".", trim($data['price'])));
         $this->setType(trim($data['type']));
         $this->setSize(trim($data['size']));
     }
@@ -40,7 +41,7 @@ class Disk extends Product {
             $valid = "sizeTypeError";
         } elseif (strlen($this->sku) > 12) {
             $valid = "skuSizeError";
-        } elseif ($uniqueSku === false) {
+        } elseif ($uniqueSku == 0) {
             $valid = "uniqueSkuError";
         } elseif (str_contains($this->price, '.')) {
             if (strlen(substr(strrchr($this->price, "."), 1)) > 2) {
@@ -52,7 +53,7 @@ class Disk extends Product {
 
     public function create() {
         $valid = $this->validate();
-        if ($valid === "true") {
+        if ($valid == "true") {
             $query = "INSERT INTO products(sku, name, price, size, type) 
             VALUES ('$this->sku', '$this->name', '$this->price', '$this->size', '$this->type')";
             $this->save($query);

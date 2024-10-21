@@ -1,17 +1,18 @@
 <?php
 
 include_once 'Product.php';
+include_once './controllers/ProductController.php';
 
 class Book extends Product {
     private $weight;
 
     public function __construct($data, $id){
         $this->setId($id);
-        $this->setSku($data['sku']);
-        $this->setName($data['name']);
-        $this->setPrice($data['price']);
-        $this->setType($data['type']);
-        $this->setWeight($data['weight']);
+        $this->setSku(trim($data['sku']));
+        $this->setName(trim($data['name']));
+        $this->setPrice(str_replace(",", ".", trim($data['price'])));
+        $this->setType(trim($data['type']));
+        $this->setWeight(str_replace(",", ".", trim($data['weight'])));
     }
 
     public function setWeight($value) {
@@ -40,8 +41,9 @@ class Book extends Product {
             $valid = "weightTypeError";
         } elseif (strlen($this->sku) > 12) {
             $valid = "skuSizeError";
-        } elseif ($uniqueSku === false) {
+        } elseif ($uniqueSku == 0) {
             $valid = "uniqueSkuError";
+            echo "here";
         } elseif (str_contains($this->price, '.')) {
             if (strlen(substr(strrchr($this->price, "."), 1)) > 2) {
                 $valid = "priceDecimal";
@@ -56,7 +58,7 @@ class Book extends Product {
 
     public function create() {
         $valid = $this->validate();
-        if ($valid === "true") {
+        if ($valid == "true") {
             $query = "INSERT INTO products(sku, name, price, weight, type) 
             VALUES ('$this->sku', '$this->name', '$this->price', '$this->weight', '$this->type')";
             $this->save($query);

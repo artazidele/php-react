@@ -1,6 +1,8 @@
 <?php
 
 include_once 'Product.php';
+include_once './controllers/ProductController.php';
+
 class Furniture extends Product {
     private $length;
     private $width;
@@ -8,13 +10,13 @@ class Furniture extends Product {
 
     public function __construct($data, $id){
         $this->setId($id);
-        $this->setSku($data['sku']);
-        $this->setName($data['name']);
-        $this->setPrice($data['price']);
-        $this->setType($data['type']);
-        $this->setLength($data['length']);
-        $this->setWidth($data['width']);
-        $this->setHeight($data['height']);
+        $this->setSku(trim($data['sku']));
+        $this->setName(trim($data['name']));
+        $this->setPrice(str_replace(",", ".", trim($data['price'])));
+        $this->setType(trim($data['type']));
+        $this->setLength(trim($data['length']));
+        $this->setWidth(trim($data['width']));
+        $this->setHeight(trim($data['height']));
     }
 
     public function setLength($value) {
@@ -67,7 +69,7 @@ class Furniture extends Product {
             $valid = "heightTypeError";
         } elseif (strlen($this->sku) > 12) {
             $valid = "skuSizeError";
-        } elseif ($uniqueSku === false) {
+        } elseif ($uniqueSku == 0) {
             $valid = "uniqueSkuError";
         } elseif (str_contains($this->price, '.')) {
             if (strlen(substr(strrchr($this->price, "."), 1)) > 2) {
@@ -79,7 +81,7 @@ class Furniture extends Product {
 
     public function create() {
         $valid = $this->validate();
-        if ($valid === "true") {
+        if ($valid == "true") {
             $query = "INSERT INTO products(sku, name, price, length, width, height, type) 
             VALUES ('$this->sku', '$this->name', '$this->price', '$this->length', '$this->width', '$this->height', '$this->type')";
             $this->save($query);
@@ -101,5 +103,6 @@ class Furniture extends Product {
         return serialize($furniture);
     }
 }
+
 
 ?>

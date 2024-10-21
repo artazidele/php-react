@@ -58,7 +58,7 @@ class ProductController {
         }
     }
 
-    public function checkUniqueSku($newSku): Bool {
+    public function checkUniqueSku($newSku): Int {
         $query = "SELECT * FROM products ORDER BY id ASC";
 
         $db = new Database();
@@ -69,23 +69,17 @@ class ProductController {
         }
 
         $result = mysqli_query($dbConnection, $query);
-
-        $unique = true;
-
         if($result) {
             if($result->num_rows > 0) {
-                $products = array();
                 while ($row = $result->fetch_assoc()){
                     extract($row);
-                    if ($row['sku'] === $newSku) {
-                        $unique = false;
-                        break;
+                    if ($row['sku'] == $newSku) {
+                        return 0;
                     }
                 }
             }
         }
-
-        return $unique;
+        return 1;
     }
 }
 

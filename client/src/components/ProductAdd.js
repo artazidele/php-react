@@ -201,7 +201,7 @@ export function ProductAdd() {
 
     return (
         <div>
-            <form id="#product_form" onSubmit={submitForm}>
+            <form id='product_form' onSubmit={submitForm}>
                 <div className="header-div">
                     <div className="header">
                         <h3>Product Add</h3>
@@ -217,26 +217,26 @@ export function ProductAdd() {
                     <div className="all_type_inputs">
                         <div className="div_input">
                             <label>SKU</label>
-                            <input id="#sku" type="text" value={sku} onChange={(e) => setSku(e.target.value)}/>
+                            <input id="sku" type="text" value={sku} onChange={(e) => setSku(e.target.value)}/>
                         </div>
                         {uniqueSkuError && <p className="error-p">This SKU already exists</p>}
                         {emptySku && <p className="error-p">SKU is required</p>}
                         {skuSizeError && <p className="error-p">Max SKU size is 12 characters</p>}
                         <div className="div_input">
                             <label>Name</label>
-                            <input id="#name" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+                            <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
                         </div>
                         {emptyName && <p className="error-p">Name is required</p>}
                         <div className="div_input">
                             <label>Price ($)</label>
-                            <input id="#price" type="text" value={price} onChange={(e) => setPrice(e.target.value)}/>
+                            <input id="price" type="text" value={price} onChange={(e) => setPrice(e.target.value)}/>
                         </div>
                         {emptyPrice && <p className="error-p">Price is required</p>}
                         {priceTypeError && <p className="error-p">Price should be a number</p>}
                         {priceDecimal && <p className="error-p">Price should be a number with 0, 1 or 2 decimal digits.</p>}
                         <div className="div_input">
                             <label>Type Switcher</label>
-                            <select id="#productType" name="type" onChange={changeLayout}>
+                            <select id="productType" name="type" onChange={changeLayout}>
                                 <option value="disk">DVD</option>
                                 <option value="book">Book</option>
                                 <option value="furniture">Furniture</option>
@@ -248,7 +248,7 @@ export function ProductAdd() {
                             <p>Please, provide size</p>
                             <div className="div_input">
                                 <label>Size (MB)</label>
-                                <input id="#size" type="text" value={size} onChange={(e) => setSize(e.target.value)}/>
+                                <input id="size" type="text" value={size} onChange={(e) => setSize(e.target.value)}/>
                             </div>
                             {sizeTypeError && <p className="error-p">Size should be an integer</p>}
                             {emptySize && <p className="error-p">Size is required</p>}
@@ -257,19 +257,19 @@ export function ProductAdd() {
                             <p>Please, provide dimentions</p>
                             <div className="div_input">
                                 <label>Height (CM)</label>
-                                <input id="#height" type="text" value={height} onChange={(e) => setHeight(e.target.value)}/>
+                                <input id="height" type="text" value={height} onChange={(e) => setHeight(e.target.value)}/>
                             </div>
                             {heightTypeError && <p className="error-p">Height should be an integer</p>}
                             {emptyHeight && <p className="error-p">Height is required</p>}
                             <div className="div_input">
                                 <label>Width (CM)</label>
-                                <input id="#width" type="text" value={width} onChange={(e) => setWidth(e.target.value)}/>
+                                <input id="width" type="text" value={width} onChange={(e) => setWidth(e.target.value)}/>
                             </div>
                             {widthTypeError && <p className="error-p">Width should be an integer</p>}
                             {emptyWidth && <p className="error-p">Width is required</p>}
                             <div className="div_input">
                                 <label>Length (CM)</label>
-                                <input id="#length" type="text" value={length} onChange={(e) => setLength(e.target.value)}/>
+                                <input id="length" type="text" value={length} onChange={(e) => setLength(e.target.value)}/>
                             </div>
                             {lengthTypeError && <p className="error-p">Length should be an integer</p>}
                             {emptyLength && <p className="error-p">Length is required</p>}
@@ -278,7 +278,7 @@ export function ProductAdd() {
                             <p>Please, provide weight</p>
                             <div className="div_input">
                                 <label>Weight (KG)</label>
-                                <input id="#weight" type="text" value={weight} onChange={(e) => setWeight(e.target.value)}/>
+                                <input id="weight" type="text" value={weight} onChange={(e) => setWeight(e.target.value)}/>
                             </div>
                             {weightTypeError && <p className="error-p">Weight should be a number</p>}
                             {weightDecimal && <p className="error-p">Weight should be a number with 0, 1, 2 or 3 decimal digits.</p>}

@@ -1,5 +1,6 @@
 <?php
 
+
 include_once './database/Database.php';
 
 abstract class Product {
