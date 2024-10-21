@@ -43,7 +43,6 @@ class Book extends Product {
             $valid = "skuSizeError";
         } elseif ($uniqueSku == 0) {
             $valid = "uniqueSkuError";
-            echo "here";
         } elseif (str_contains($this->price, '.')) {
             if (strlen(substr(strrchr($this->price, "."), 1)) > 2) {
                 $valid = "priceDecimal";
